@@ -4,9 +4,14 @@ import static ch.lambdaj.Lambda.*;
 import static java.util.Arrays.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import org.hamcrest.Matcher;
+
+import beans.Adress;
+import beans.Person;
+import beans.Stanowisko;
 
 import com.google.common.primitives.Chars;
 
@@ -22,27 +27,114 @@ public class ListUtils
 	 */
 	public static void main(String[] args)
 	{
-		// TODO Auto-generated method stub
+		//generacja danych		
+		List<Person> pers = new ArrayList<Person>();
 		
-		//mapCount();
+		List<Adress> adr = new ArrayList<Adress>();
 		
+		List<Stanowisko> stan = new ArrayList<Stanowisko>();
+		
+		StartLambda.generateData(pers, adr, stan);		
+		
+		mapCount(pers);
+		
+		//anagramTest();
 
+		//joinStrings(pers);
 		
-		
+		//sortowanie(pers);		
 
 	}
 	
-	public ListUtils()
-	{		
+
+	/**
+	 * sortowanie, klasyczny sposób - sortowanie przez wstawianie - najbardziej przewidywalny algorytm
+	 * @param p
+	 */
+	public static void sortowanie(List<Person> p)
+	{
+		//ArrayList<Object> p1 = new ArrayList<Object>((index(p, on(Person.class).getName() )).values() );
+		//ArrayList<Object> p2 = new ArrayList<Object>((index(p, on(Person.class).getName() )).values() );
+		ArrayList<Person> p1 = new ArrayList<Person>(p );
+		ArrayList<Person> p2 = new ArrayList<Person>(p );
 		
+		List<Person> ps2 = null; 
+
+		//klasyczne sortowanie przez wstawianie
+		
+		StartLambda.print.each(p1);
+		System.out.println("===============================================");
+		
+		long l1 = System.nanoTime();
+		for(int i = 0; i < p1.size(); i++)
+		{
+			//System.out.println(((Person)p1.get(i)).getName());
+			//System.out.println("==");
+			for(int j = i; j > 0; j--)
+			{
+				if(  ((Person)p1.get(j - 1)).getName().compareTo(((Person)p1.get(j)).getName())  > 0   )
+				{					
+					Person tmp = (Person)p1.get(j - 1);
+					String s1 = ((Person)p1.get(j - 1)).getName();
+					String s2 = ((Person)p1.get(j)).getName();
+					
+					//System.out.println(s1 + " : " + s2);
+					
+					p1.set(j - 1, p1.get(j));
+					p1.set(j, tmp);
+					s1 = ((Person)p1.get(j - 1)).getName();
+					s2 = ((Person)p1.get(j)).getName();				
+					
+					//System.out.println(s1 + " : " + s2);
+				}
+			}
+		}
+		long l2 = System.nanoTime();
+		
+		System.out.println("===============================================");
+		StartLambda.print.each(p1);
+		System.out.println("===============================================");
+		
+		long l3 = System.nanoTime();
+		ps2 = sort(p2, on(Person.class).getName() );
+		long l4 = System.nanoTime();
+		
+		StartLambda.print.each(  ps2 );
+		
+		System.out.println("lambda/classic : " + (((double)(l4-l3))/((double)(l2-l1)))  );
 	}
 	
+	
+	/**
+	 * Łączenie list w jeden łańcuch znakowy
+	 * @param p lista osób do połączenia
+	 */
+	public static void joinStrings(List<Person> p)
+	{
+		long l1 = System.nanoTime();
+		String s1 = "";
+		for(Person p1 : p)
+		{
+			s1 += p1.toString() + "\n";
+		}
+		long l2 = System.nanoTime();
+		
+		//System.out.println(s1);
+		//System.out.println("================================================");
+		
+		long l3 = System.nanoTime();
+		String s2 = joinFrom(p, "\n").toString();
+		long l4 = System.nanoTime();
+		//System.out.println(s2);
+		
+		System.out.println("lambda/classic : " + (l4-l3)/(l2-l1)  );
+	}
 	
 	
 	/**
 	 * Demonstruje zliczanie - Lambda.count
 	 */
-	public static void mapCount()
+	public static void mapCount( List<Person> prs)
 	{
 		List<String> imiona = asList("Ania", "Magda", "Ola", "Ania", "Ola", "Ania", "Aneta", "Magda", "Ania");
 		
@@ -52,6 +144,16 @@ public class ListUtils
 		{
 			System.out.println(key + " : " + cnt.get(key));
 		}
+		
+		System.out.println("==================================");
+				
+		Map<String, Integer> mp = count(prs, on(Person.class).getName()  );
+		
+		for(String key : mp.keySet())
+		{
+			System.out.println(key + " : " + mp.get(key));
+		}		
+		
 	}	
 	
 	/**
@@ -66,19 +168,23 @@ public class ListUtils
 		};
 		
 		long l1 = System.nanoTime();
+		isAnagramOfPalindrome("ZAble was I ere I saw ElbaZ".toLowerCase().replace(" ", "") );
+		long l2 = System.nanoTime();
 		System.out.println("result : " + isAnagramOfPalindrome("ZAble was I ere I saw ElbaZ".toLowerCase().replace(" ", "") )  );
 		System.out.println("result : " + isAnagramOfPalindrome("Rats live on no evil star".toLowerCase().replace(" ", "")  ));
 		System.out.println("result : " + isAnagramOfPalindrome("kayak"));
 		System.out.println("result : " + isAnagramOfPalindrome("rraattsslliivveeoonn"));
-		long l2 = System.nanoTime();
+		
 		
 		System.out.println("=======================================");
 		long l3 = System.nanoTime();
+		isAnagram_lambda("ZAble was I ere I saw ElbaZ".toLowerCase().replace(" ", ""), odd );
+		long l4 = System.nanoTime();		
 		System.out.println("result : " + isAnagram_lambda("ZAble was I ere I saw ElbaZ".toLowerCase().replace(" ", ""), odd )  );
 		System.out.println("result : " + isAnagram_lambda("Rats live on no evil star".toLowerCase().replace(" ", "") ,  odd )  );
 		System.out.println("result : " + isAnagram_lambda("kayak" , odd  )  );
 		System.out.println("result : " + isAnagram_lambda("rraattsslliivveeoonn", odd)   );
-		long l4 = System.nanoTime();		
+		
 		System.out.println("lambda/classic : " + (l4-l3)/(l2-l1)  );
 	}
 	

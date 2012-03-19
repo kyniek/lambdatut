@@ -34,9 +34,9 @@ import ch.lambdaj.group.GroupItem;
  */
 public class StartLambda
 {
-	static Closure1<String> print = new Closure1<String>()
+	public static Closure1<Object> print = new Closure1<Object>()
 	{{		
-		of( System.out ).println(  var(String.class)       ) ;
+		of( System.out ).println(  var(Object.class).toString()       ) ;
 	}};
 
 	public abstract class Bazowa
@@ -81,9 +81,11 @@ public class StartLambda
 		
 		//closures2();
 		
-		//closures3();
+		closures3();
 		
-		filtrowanie2();
+		//filtrowanie();
+		
+		//filtrowanie2();
 	}
 	
 	
@@ -92,26 +94,8 @@ public class StartLambda
 		//selekcja większych niż.... użycie wbudowanych kryteriów
 		List<Integer> biggerThan3 = filter(greaterThan(3), asList(1, 2, 3, 4, 5));
 		
-		//domknięcia
-		Closure printl = closure(); 
-		//of - wiąże zmienną podanej klasy/obiekt do aktywnego domknięcia
-		//var - definiuje wolną zmienną podanej klasy dla aktywnego domknięcia
-		of(System.out).println(var(Integer.class));
 		//wywołanie - tzw. domknięcie wyrażenia.
-		printl.each(biggerThan3);
-		
-		
-		
-		
-		//tworzenie własnego warunku - jako obiekt anonimowej klasy wewnętrznej
-		Matcher<Integer> odd = new Predicate<Integer>() 
-		{
-			public boolean apply(Integer item)
-			{
-				return item % 2 == 1;
-			}
-		};
-	
+		print.each(  biggerThan3    );	
 	}
 	
 	
@@ -130,11 +114,6 @@ public class StartLambda
 		
 		generateData(pers, adr, stan);		
 		
-		//domknięcie wypisujące pojedynczy String
-		Closure1<String> cl = closure(String.class);		
-		of(System.out).println( var(String.class) );		
-		
-		
 		
 		//wypisywanie wszystkich stanowisk
 		if(bl_print)
@@ -148,7 +127,7 @@ public class StartLambda
 			long l2 = System.nanoTime();		
 			
 			long l3 = System.nanoTime();
-			cl.each( extract(stan, on(Stanowisko.class).toString() )  );
+			print.each( extract(stan, on(Stanowisko.class).toString() )  );
 			long l4 = System.nanoTime();
 			
 			//średni wynik : Lambda : 12895 for : 411
@@ -171,13 +150,13 @@ public class StartLambda
 				}
 			}
 			long l6 = System.nanoTime();
-			//cl.each(extract(ls_p, on(Person.class).toString() ) );
+			//print.each(extract(ls_p, on(Person.class).toString() ) );
 			
 			long l7 = System.nanoTime();
 			ls_p = select(pers, having(on(Person.class).getAdres().getCity() ,  equalTo(miasto) ) );
 			long l8 = System.nanoTime();
 			//wypisanie wyniku	
-			//cl.each( extract(select(pers, having(on(Person.class).getAdres().getCity() ,  equalTo(miasto) ) ) , on(Person.class).toString() ) );
+			//print.each( extract(select(pers, having(on(Person.class).getAdres().getCity() ,  equalTo(miasto) ) ) , on(Person.class).toString() ) );
 			
 			//wyszukiwanie po mieście 
 			System.out.println("osoby mieszkające w " + miasto + " lambda/for : " + (l8-l7)/(l6-l5) ) ;			
@@ -220,7 +199,7 @@ public class StartLambda
 			}
 			long l2 = System.nanoTime();
 			//wypisanie
-			//cl.each(extract(ls_minCache, on(Stanowisko.class).toString()  ));
+			//print.each(extract(ls_minCache, on(Stanowisko.class).toString()  ));
 			
 			
 			//lambda :
@@ -228,7 +207,7 @@ public class StartLambda
 			ls_minCache = select(stan, having( on(Stanowisko.class).getEarnings(), lessThan( min(stan, on(Stanowisko.class).getEarnings() ) + 100) )  );
 			long l4 = System.nanoTime();
 			//System.out.println("Lambda : ");
-			//cl.each(extract(ls_minCache, on(Stanowisko.class).toString()  ));
+			//print.each(extract(ls_minCache, on(Stanowisko.class).toString()  ));
 			
 			System.out.println("zawody ze stawkami (min + 100) : " + " lambda/for : " + (l4-l3)/(l2-l1) ) ;				
 		}
@@ -314,6 +293,9 @@ public class StartLambda
 //				}
 //			}
 			
+			//spłaszczanie
+			//List<Person> ls_prs = flatten(persByZarobki);
+			//print.each(ls_prs);
 
 
 			for(Group<Person> ob : persByZarobki.subgroups())
@@ -325,26 +307,14 @@ public class StartLambda
 			System.out.println("grupowanie osób ze stawkami (min + 100)  po stanowisku : " + " lambda/for : " + (l4-l3)/(l2-l1) ) ;	
 		}
 		
-		Map<String, Person> map = index(pers, on(Person.class).getName()   ); //+ on(Person.class).getSurName()
-		
-			
-		System.out.println("=================");
-		//cl1.each(  extract( map.values(), on(Person.class).toString())  );
-		//cl1.each(  map.values()  );
-		System.out.println("=================");
-		//print.each(strs);
-		
-		
-		
-		//cl.each(extract(adr, on(Adress.class).toString() ) );
+
 	}
 	
 	
 	public void closures3()
 	{
 		List<Person> pers = new ArrayList<Person>();
-		List<Adress> adrr = new ArrayList<Adress>();
-		
+				
 		for(int i = 0; i < 100; i++)
 		{
 			Adress adr = new Adress("Miasto" + i%10);			
@@ -416,7 +386,6 @@ public class StartLambda
 			{
 				public String doCos() 
 				{
-					//System.out.println(x);;
 					return "val : " + x;
 				}
 			};
@@ -428,13 +397,9 @@ public class StartLambda
 		Closure3<Bazowa, Integer, Integer> cl = closure(Bazowa.class, Integer.class, Integer.class);
 		of(Bazowa.class).getSum( var(Integer.class), var(Integer.class)  );
 		
-		
-		List<?> ls2 = cl.each(ls, par1, par2);
-		
-		for(Object s : ls2)
-		{
-			System.out.println("val : " + (Integer)s );
-		}		
+				
+		List<?> ls2 = cl.each(ls, par1, par2);		
+		print.each(ls2);		
 
 		
 	}
@@ -477,17 +442,18 @@ public class StartLambda
 
 		
 	
-		//wykonanie i pomiar dla domknięć
+		//wykonanie i pomiar dla domknięć - domknięcia zagnieżdżone
+		//I użycie domknięcia
 		long l1 = System.nanoTime();
 		cl.each( cl2.each(ls)  );
 		long l2 = System.nanoTime();
-		
+		// II użycie domknięcia
 		long l5 = System.nanoTime();
 		cl.each( cl2.each(ls)  );
 		long l6 = System.nanoTime();		
 		
 		
-		//klasyczne podejście z pętlą
+		//klasyczne podejście z pętlą - wypisanie obiektów wraz z wołaniem metody
 		long l3 = System.nanoTime();
 		for(Bazowa b : ls)
 		{
@@ -503,10 +469,12 @@ public class StartLambda
 		}
 		long l8 = System.nanoTime();
 		
+		//wypisanie za pomocą domknięć
+		//I wykonanie domknięcia
 		long l9 = System.nanoTime();
 		cl3.each(ls2);
 		long l10 = System.nanoTime();
-		
+		//II wykonanie domknięcia
 		long l11 = System.nanoTime();
 		cl3.each(ls2);
 		long l12 = System.nanoTime();
@@ -515,7 +483,7 @@ public class StartLambda
 		
 			
 				
-		System.out.println("lambda : " + (l2 - l1) + " for : " + ( l4 - l3)  + " lambda2 : " + (l6 - l5));		
+		System.out.println("lambda zagnieżdżone : " + (l2 - l1) + " for : " + ( l4 - l3)  + " lambda2 : " + (l6 - l5));		
 		
 		System.out.println("lambda : " + (l10 - l9) + " for : " + (l8 - l7) + " lambda2 : " + (l12 - l11));
 	}
