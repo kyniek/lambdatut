@@ -2,7 +2,6 @@ package lambda;
 
 import static ch.lambdaj.Lambda.*;
 import static java.util.Arrays.*;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -36,14 +35,46 @@ public class ListUtils
 		
 		StartLambda.generateData(pers, adr, stan);		
 		
-		mapCount(pers);
+		//mapCount(pers);
 		
 		//anagramTest();
 
 		//joinStrings(pers);
 		
-		//sortowanie(pers);		
+		//sortowanie(pers);	
+		
+		extraktowanie(pers);
 
+	}
+	
+	
+	
+	
+	/**
+	 * Ekstraktownie zadanej własności do listy
+	 * @param p
+	 */
+	public static void extraktowanie(List<Person> p)
+	{
+		long l1 = System.nanoTime();
+		List<String> names1 = new ArrayList<String>();
+		for(Person pers : p)
+		{
+			names1.add(pers.getName());
+		}
+		long l2 = System.nanoTime();
+		
+		long l3 = System.nanoTime();
+		List<String>names2 = extract(p, on(Person.class).getName());
+		long l4 = System.nanoTime();
+		
+				
+//		StartLambda.print.each(names1);
+//		System.out.println("===============================================");
+//		StartLambda.print.each(names2);
+//		System.out.println("===============================================");
+		
+		System.out.println("lambda/classic : " + (((double)(l4-l3))/((double)(l2-l1)))  );
 	}
 	
 

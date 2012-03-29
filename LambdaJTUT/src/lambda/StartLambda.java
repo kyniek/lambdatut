@@ -13,13 +13,10 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.hamcrest.Matcher;
-
 import beans.Adress;
 import beans.Person;
 import beans.Stanowisko;
-
 import ch.lambdaj.function.closure.Closure;
 import ch.lambdaj.function.closure.Closure1;
 import ch.lambdaj.function.closure.Closure2;
@@ -404,7 +401,11 @@ public class StartLambda
 		
 	}
 	
-	//Testowanie domknięć - I etap
+	/**
+	 * Domknięcia
+	 * - Domknięcia ze zmienną związaną oraz z ze zmienną wolną
+	 * - możliwość zagnieżdżania domknięć
+	 */
 	public void closures1()
 	{
 		//nowa lista - 100 obiektów

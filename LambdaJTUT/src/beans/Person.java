@@ -15,6 +15,8 @@ public class Person
 	
 	private Adress adres;
 	
+	private int age;
+	
 	
 	
 	
@@ -22,19 +24,19 @@ public class Person
 
 	public Person()
 	{
-		;
+		age = 15 + (int)(Math.random() * 100);
 	}
 
 	public Person(String name, String surName)
 	{
-		super();
+		this();				
 		this.name = name;
 		this.surName = surName;
 	}
 
 	public Person(String name, String surName, Adress adres)
 	{
-		super();
+		this();
 		this.name = name;
 		this.surName = surName;
 		this.adres = adres;
@@ -84,6 +86,16 @@ public class Person
 	public String toString()
 	{
 		return this.name + " " + this.surName;
+	}
+
+	public int getAge()
+	{
+		return age;
+	}
+
+	public void setAge(int age)
+	{
+		this.age = age;
 	}
 	
 
