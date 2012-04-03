@@ -97,7 +97,7 @@ public class ListUtils
 			}
 		};
 		
-		Multimap<Stanowisko, Person> multi = Multimaps.index(p, f);
+		Multimap<Stanowisko, Person> multi = Multimaps.index(p, f);//funkcja zwraca klucz
 		long l2 = System.nanoTime();
 		
 		

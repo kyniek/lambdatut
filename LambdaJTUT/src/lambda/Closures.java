@@ -63,10 +63,10 @@ public class Closures
 		
 		System.out.println("==================================================================================");
 		//wypisanie rezultatu
-//		for(String s : res.get())
-//		{
-//			System.out.println(s);
-//		}
+		for(String s : res.get())
+		{
+			System.out.println(s);
+		}
 		
 		
 	}

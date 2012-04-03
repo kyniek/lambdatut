@@ -54,7 +54,7 @@ public class StartGuava
 	 */
 	public boolean argumentCheck(String val)
 	{
-		checkNotNull(String.class);
+		checkNotNull(val);
 		checkArgument(val.startsWith("a"), "value must starts with a");
 		
 		return true;

@@ -75,7 +75,7 @@ public class StartLambda
 		
 		//filtrowanie();
 		
-		//filtrowanie2();
+		filtrowanie2();
 	}
 	
 	

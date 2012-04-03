@@ -41,7 +41,7 @@ public class ListUtils
 		
 		//sortowanie(pers);	
 		
-		//extraktowanie(pers);
+		extraktowanie(pers);
 
 	}
 	
