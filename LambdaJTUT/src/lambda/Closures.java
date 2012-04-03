@@ -62,11 +62,11 @@ public class Closures
 		of(System.out).println(var( String.class));
 		
 		System.out.println("==================================================================================");
-		
-		for(String s : res.get())
-		{
-			System.out.println(s);
-		}
+		//wypisanie rezultatu
+//		for(String s : res.get())
+//		{
+//			System.out.println(s);
+//		}
 		
 		
 	}
@@ -84,7 +84,7 @@ public class Closures
 				for(String grName : gr.keySet())
 				{
 					ls.add(grName);
-					cl.apply("=====" + grName + "=====");
+					cl.apply("=====" + grName + "=====");//wywołanie domknięcia na zmiennej domykanej
 					for(Person prl : gr.find(grName) )
 					{
 						ls.add(prl.getName() + " " + prl.getSurName() );

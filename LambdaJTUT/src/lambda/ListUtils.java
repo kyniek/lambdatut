@@ -3,11 +3,9 @@ package lambda;
 import static ch.lambdaj.Lambda.*;
 import static java.util.Arrays.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import org.hamcrest.Matcher;
-
 import beans.Adress;
 import beans.Person;
 import beans.Stanowisko;
@@ -43,7 +41,7 @@ public class ListUtils
 		
 		//sortowanie(pers);	
 		
-		extraktowanie(pers);
+		//extraktowanie(pers);
 
 	}
 	
@@ -105,18 +103,9 @@ public class ListUtils
 			{
 				if(  ((Person)p1.get(j - 1)).getName().compareTo(((Person)p1.get(j)).getName())  > 0   )
 				{					
-					Person tmp = (Person)p1.get(j - 1);
-					String s1 = ((Person)p1.get(j - 1)).getName();
-					String s2 = ((Person)p1.get(j)).getName();
-					
-					//System.out.println(s1 + " : " + s2);
-					
+					Person tmp = (Person)p1.get(j - 1);					
 					p1.set(j - 1, p1.get(j));
 					p1.set(j, tmp);
-					s1 = ((Person)p1.get(j - 1)).getName();
-					s2 = ((Person)p1.get(j)).getName();				
-					
-					//System.out.println(s1 + " : " + s2);
 				}
 			}
 		}

@@ -65,7 +65,7 @@ public class Aggregation
 		
 		System.out.println("cache0/cache/cache : " + cache0 + "/" + cache + "/" + cache2);
 		
-		System.out.println("lambda1/classic : " + (((double)(l4-l3))/((double)(l2-l1)))  );
+		System.out.println("lambda1/classic : " + (((double)(l6-l5))/((double)(l2-l1)))  );
 		
 		System.out.println("lambda1/lambda2 : " + (((double)(l4-l3))/((double)(l6-l5)))  );	
 	}
@@ -87,16 +87,16 @@ public class Aggregation
 		
 		
 		long l3 = System.nanoTime();		
-		int max3 = maxFrom(pers).getAge();
+		int max2 = max(pers, on(Person.class).getAge() );
 		long l4 = System.nanoTime();
 		
 		long l5 = System.nanoTime();
-		int max2 = max(pers, on(Person.class).getAge() );
+		int max3 = maxFrom(pers).getAge();
 		long l6 = System.nanoTime();
 		
 		System.out.println("maxAge : clasic/lambda1/lambda2 " + max + "/" + max2 + "/" + max3);
 		
-		System.out.println("lambda1/classic : " + (((double)(l4-l3))/((double)(l2-l1)))  );
+		System.out.println("lambda1/classic : " + (((double)(l6-l5))/((double)(l2-l1)))  );
 		
 		System.out.println("lambda1/lambda2 : " + (((double)(l4-l3))/((double)(l6-l5)))  );		
 	}

@@ -85,7 +85,7 @@ public class Person
 	@Override
 	public String toString()
 	{
-		return this.name + " " + this.surName;
+		return this.name + " " + this.surName;// + " " + adres.getCity();
 	}
 
 	public int getAge()

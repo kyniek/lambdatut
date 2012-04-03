@@ -4,26 +4,19 @@
 package lambda;
 
 import static ch.lambdaj.Lambda.*;
-import static org.hamcrest.Matchers.*;
 import static java.util.Arrays.*;
-//import static ch.lambdaj.collection.LambdaCollection.*;
-
+import static org.hamcrest.Matchers.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.hamcrest.Matcher;
 import beans.Adress;
 import beans.Person;
 import beans.Stanowisko;
 import ch.lambdaj.function.closure.Closure;
 import ch.lambdaj.function.closure.Closure1;
-import ch.lambdaj.function.closure.Closure2;
 import ch.lambdaj.function.closure.Closure3;
-import ch.lambdaj.function.matcher.Predicate;
 import ch.lambdaj.group.Group;
-import ch.lambdaj.group.GroupItem;
 
 /**
  * @author Kyniek
@@ -78,7 +71,7 @@ public class StartLambda
 		
 		//closures2();
 		
-		closures3();
+		//closures3();//wykomentowane
 		
 		//filtrowanie();
 		
@@ -100,9 +93,9 @@ public class StartLambda
 	public void filtrowanie2()
 	{
 		boolean bl_print = false;	//wypisywanie wszystkich stanowisk
-		boolean bl_townSel = false;	//wypisanie wszystkich osób mieszkających w danym mieście
+		boolean bl_townSel = true;	//wypisanie wszystkich osób mieszkających w danym mieście
 		boolean bl_min = false;		//zawody w których zarabia się (minimum + 100) 		
-		boolean bl_group_min = true;//pogrupować osoby po stanowiskach - tylko tych gdzie zarabia się (min + 100) 
+		boolean bl_group_min = false;//pogrupować osoby po stanowiskach - tylko tych gdzie zarabia się (min + 100) 
 		
 		
 		List<Person> pers = new ArrayList<Person>();
@@ -167,17 +160,10 @@ public class StartLambda
 			System.out.println("==============================================================================");			
 			long l1 = System.nanoTime();
 			List<Stanowisko> ls_minCache = new ArrayList<Stanowisko>();			
-			int max = 0;
 			int min = 0;
-			for(Stanowisko s : stan)
-			{
-				if(max < s.getEarnings() )
-				{
-					max = s.getEarnings();
-				}
-			}
+			
 			//System.out.println("max : " + max);
-			min = max;
+			min = stan.get(0).getEarnings();
 			for(Stanowisko s : stan)
 			{
 				if(min > s.getEarnings())
@@ -196,15 +182,15 @@ public class StartLambda
 			}
 			long l2 = System.nanoTime();
 			//wypisanie
-			//print.each(extract(ls_minCache, on(Stanowisko.class).toString()  ));
+			print.each(extract(ls_minCache, on(Stanowisko.class).toString()  ));
 			
 			
 			//lambda :
 			long l3 = System.nanoTime();
 			ls_minCache = select(stan, having( on(Stanowisko.class).getEarnings(), lessThan( min(stan, on(Stanowisko.class).getEarnings() ) + 100) )  );
 			long l4 = System.nanoTime();
-			//System.out.println("Lambda : ");
-			//print.each(extract(ls_minCache, on(Stanowisko.class).toString()  ));
+			System.out.println("Lambda : ");
+			print.each(extract(ls_minCache, on(Stanowisko.class).toString()  ));
 			
 			System.out.println("zawody ze stawkami (min + 100) : " + " lambda/for : " + (l4-l3)/(l2-l1) ) ;				
 		}
@@ -216,17 +202,11 @@ public class StartLambda
 			System.out.println("==============================================================================");			
 			long l1 = System.nanoTime();
 			List<Stanowisko> ls_minCache = new ArrayList<Stanowisko>();			
-			int max = 0;
+			
 			int min = 0;
-			for(Stanowisko s : stan)
-			{
-				if(max < s.getEarnings() )
-				{
-					max = s.getEarnings();
-				}
-			}
+			
 			//System.out.println("max : " + max);
-			min = max;
+			min = stan.get(0).getEarnings();
 			for(Stanowisko s : stan)
 			{
 				if(min > s.getEarnings())
@@ -248,27 +228,22 @@ public class StartLambda
 			for(Stanowisko s : ls_minCache)
 			{
 				List<Person> lsTmp = new ArrayList<Person>();
-				for(Person p : pers)
-				{
-					if(p.getStanowisko().getName().equals(s.getName()))
-					{
-						lsTmp.add(p);
-					}				
-				}
-				if(lsTmp.size() > 0)
-				{
-					osobaStanowisko.put(s.getName(), lsTmp);
-				}
+				osobaStanowisko.put(s.getName(), lsTmp);
+			}
+			for(Person p : pers)
+			{	
+				if(osobaStanowisko.containsKey(p.getStanowisko().getName()))
+					osobaStanowisko.get(p.getStanowisko().getName()).add(p);				
 			}
 			long l2 = System.nanoTime();		
 			//sprawdzenie :
-	//		for(String key : osobaStanowisko.keySet())
-	//		{
-	//			for(Person p : osobaStanowisko.get(key))
-	//			{
-	//				System.out.println(key + " : " + p.toString());
-	//			}
-	//		}
+			for(String key : osobaStanowisko.keySet())
+			{
+				for(Person p : osobaStanowisko.get(key))
+				{
+					System.out.println(key + " : " + p.toString());
+				}
+			}
 			//lambdda 
 			System.out.println("---------------------------------------------------");
 			
@@ -281,14 +256,14 @@ public class StartLambda
 			long l4 = System.nanoTime();
 			
 			//sprawdzenie
-//			for(String head : persByZarobki.keySet()  )
-//			{
-//				System.out.println(head);
-//				for(Person p : persByZarobki.find(head)  )
-//				{
-//					System.out.println(head + " : " + p.toString());
-//				}
-//			}
+			for(String head : persByZarobki.keySet()  )
+			{
+				System.out.println(head);
+				for(Person p : persByZarobki.find(head)  )
+				{
+					System.out.println(head + " : " + p.toString());
+				}
+			}
 			
 			//spłaszczanie
 			//List<Person> ls_prs = flatten(persByZarobki);
@@ -308,65 +283,7 @@ public class StartLambda
 	}
 	
 	
-	public void closures3()
-	{
-		List<Person> pers = new ArrayList<Person>();
-				
-		for(int i = 0; i < 100; i++)
-		{
-			Adress adr = new Adress("Miasto" + i%10);			
-			pers.add(new Person("Janek" + i, "Franek" + (100 - i), adr   ));
-		}
 
-		
-		long l1 = System.nanoTime();
-		String names = joinFrom(pers, "\n").getName();
-		long l2 = System.nanoTime();
-//		System.out.println(names);
-		
-		long l3 = System.nanoTime();
-		String names2 = "";
-		for(Person p : pers)
-		{
-			names2 += p.getName() + "\n";
-		}
-		names2 = names2.substring(0, names2.length() - 1);
-		long l4 = System.nanoTime();		
-		
-		//System.out.println(names2);
-		//wydajność lambdy wydaje się być o wiele słabsza
-		System.out.println("lambda : " + (l2 - l1)/1000 + " for : " + (l4 - l3)/1000  );
-		
-		
-		//testowanie filtrowania
-		List<Person> pers2 = select(pers, having(on(Person.class).getAdres().getCity(), equalTo("Miasto9") ));
-		long l5 = System.nanoTime();		
-		 pers2 = select(pers, having(on(Person.class).getAdres().getCity(), equalTo("Miasto9") ));
-		long l6 = System.nanoTime();
-		
-		long l7 = System.nanoTime();
-		List<Person> pers3 = new ArrayList<Person>();
-		for(Person p : pers)
-		{
-			if(p.getAdres().getCity().equals("Miasto9"))
-			{
-				pers3.add(p);
-			}
-		}
-		long l8 = System.nanoTime();
-				
-		//String names3 = joinFrom(pers2, "\n").getName() ;
-		//System.out.println(names3);
-		//lambda jest od pętli gorsza o rzędy wielkości, jednak gdy wykona się drugi raz podobne zapytanie to różnica się bardzo zmniejsza
-		//nie rzędy wielkości a 2-3 razy
-		//wygląda na to że wiązania pochłaniają dużo czasu
-		System.out.println("lambda : " + (l6 - l5)/1000 + " for : " + (l8 - l7)/1000  );
-		
-		
-		
-		
-		
-	}
 	
 	
 	

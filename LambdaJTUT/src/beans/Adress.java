@@ -97,6 +97,14 @@ public class Adress
 	{
 		return this.city + ", " + this.street;
 	}
+
+
+
+//	@Override
+//	public boolean equals(Object arg0)
+//	{		
+//		return this.city.equals( ((Adress)arg0).city  );
+//	}
 	
 	
 
